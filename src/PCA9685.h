@@ -9,7 +9,9 @@ private:
     uint8_t last_status;
 public:
     PCA9685(uint8_t address);
-    void setClkFreq(int freq, int pin);
+    void servoSetFreq(int freq, int pin);
     void writeReg(uint8_t reg, uint8_t value);
     uint8_t getServoReg(uint8_t servoNum);
+    void servoWriteMicros(int mircos, int servoNum);
+    void setAngle(float angle, int servoNum);
 };
