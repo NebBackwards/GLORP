@@ -13,6 +13,7 @@ private:
     int frequency;
 public:
     PCA9685(uint8_t address);
+    void init();
     void setFrequency(int freq);
     void writeReg(uint8_t reg, uint8_t value);
     uint8_t getServoReg(int servoNum);
