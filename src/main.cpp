@@ -1,19 +1,23 @@
 #include <Arduino.h>
 #include <PCA9685.h>
-#include <Wire.h>
+#include <servo.h>
 // put function declarations here:
-PCA9685 servoDriver = PCA9685(0x40);
+Servo servo1 = Servo(19, 1);
 
 
 void setup() {
   Serial.begin(9600);
-  Wire.begin();
-  servoDriver.init();
+  servo1.init();
   
 }
 
 void loop() {
-  servoDriver.servoWriteMicros(700,0);
-  Serial.println("hello");
+  servo1.setAngle(120);
+  delay(3000);
+  servo1.setAngle(0);
+  delay(3000);
+  servo1.setAngle(-120);
+  delay(3000);
+
 }
 
