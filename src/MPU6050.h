@@ -9,6 +9,7 @@ class MPU6050{
 
             //Sample rate = Gyro Output rate/(1+SMPLRT_DIV)
             SMPLRT_DIV = 0x19,
+            //last 3 bits set DLPF, which determines gyro output rate
             CONFIG = 0x1A,
             
             //self-test & full-scale range
@@ -43,16 +44,60 @@ class MPU6050{
             
         };
 
+        enum GYRO_FSR{
+            GYRO_FSR_250,
+            GYRO_FSR_500,
+            GYRO_FSR_1000,
+            GYRO_FSR_2000,
+        };
+        enum ACCEL_FSR{
+            ACCEL_FSR_2,
+            ACCEL_FSR_4,
+            ACCEL_FSR_8,
+            ACCEL_FSR_16,
+        };
+        enum SLEEP_MODE{
+            SLEEP_OFF = 0,
+            SLEEP_ON = 0b01000000
+        };
+
         struct vector{
-            int16_t x, y, z;
+            float x, y, z;
         };
         
         uint8_t last_status;
         uint8_t address;
+        int gyroOutputRate;
+        float accel_lsb_g;
+        float gyro_lsb_dps;
+        float offsetAccX = 0.0;
+        float offsetGyroX = 0.0;
+        float offsetGyroY = 0.0;
+        float offsetGyroZ = 0.0;
+        float pitchObservation;
+        float estimatedPitchAngle;
+        int sample_rate;
+        float gyroBiasY = 0.0;
+        const float epsilon = 0.001 * 3.14156 / 180;
+        const float kappa = 0.15;
+        
     public:
         MPU6050(uint8_t i2c_address);
+        void init_default();
+        void toggleSleep(SLEEP_MODE mode);
         vector a, g;
         uint8_t readReg(regAddr reg);
-
+        void writeReg(regAddr reg, uint8_t value);
+        uint8_t dataAvailable();
+        void readAccel();
+        void readGyro();
+        void read();
+        void setSampleRateDiv(uint8_t div);
+        void setSampleRate(int sampleRate);
+        void setDLPF(uint8_t dlpf_cfg);
+        void setGyroFSR(GYRO_FSR fsr);
+        void setAccelFSR(ACCEL_FSR fsr);
+        bool checkForPitchUpdate(float &pitchAngle);
+        void calibrate(int numValues);
 
 };
