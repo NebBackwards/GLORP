@@ -14,7 +14,7 @@ void MPU6050::init_default(){
     setDLPF(1);
     setAccelFSR(ACCEL_FSR_4);
     setGyroFSR(GYRO_FSR_500);
-    setSampleRate(100);
+    setSampleRate(1000);
     Serial.println("MPU6050 Init Done");
 }
 
